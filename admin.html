@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKS ULTRA PRO | Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff1a1a;
+            --primary-dark: #cc0000;
+            --secondary: #2d3748;
+            --accent: #00c9a7;
+            --dark: #1a202c;
+            --light: #f7fafc;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --gray: #e2e8f0;
+            --dark-gray: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: linear-gradient(135deg, var(--dark), #2d3748);
+            color: white;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100vh;
+            width: 280px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-right: 12px;
+        }
+
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ff1a1a, #ff9999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            grid-column: 2;
+            padding: 2rem 3rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card.primary .icon {
+            background: rgba(255, 26, 26, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-card.success .icon {
+            background: rgba(72, 187, 120, 0.1);
+            color: var(--success);
+        }
+
+        .stat-card.warning .icon {
+            background: rgba(237, 137, 54, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-card.danger .icon {
+            background: rgba(245, 101, 101, 0.1);
+            color: var(--danger);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .card-header .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray);
+        }
+
+        .btn-outline:hover {
+            background: var(--gray);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--dark-gray);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover td {
+            background: rgba(247, 250, 252, 0.7);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(72, 187, 120, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(237, 137, 54, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(245, 101, 101, 0.1);
+            color: var(--danger);
+        }
+
+        /* Device List */
+        .device-list {
+            list-style: none;
+        }
+
+        .device-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .device-item:last-child {
+            border-bottom: none;
+        }
+
+        .device-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(255, 26, 26, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .device-info h4 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .device-info p {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+        }
+
+        /* Modals */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .modal-header .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1rem;
+            }
+            
+            .main-content {
+                grid-column: 1;
+                padding: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>TKS ULTRA PRO</h1>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item active">
+                    <i class="fas fa-key"></i>
+                    <span>License Keys</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-laptop"></i>
+                    <span>Devices</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>License Key Management</h2>
+                <div class="user-menu">
+                    <div class="user-avatar">AD</div>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3>Total Keys</h3>
+                    <div class="value" id="total-keys">0</div>
+                </div>
+                
+                <div class="stat-card success">
+                    <div class="icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Active Keys</h3>
+                    <div class="value" id="active-keys">0</div>
+                </div>
+                
+                <div class="stat-card warning">
+                    <div class="icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h3>Active Devices</h3>
+                    <div class="value" id="active-devices">0</div>
+                </div>
+                
+                <div class="stat-card danger">
+                    <div class="icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Expiring Soon</h3>
+                    <div class="value" id="expiring-keys">0</div>
+                </div>
+            </div>
+            
+            <!-- Main Content Grid -->
+            <div class="content-grid">
+                <!-- Left Column -->
+                <div class="left-column">
+                    <!-- Keys Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>License Keys</h3>
+                            <div class="actions">
+                                <button class="btn btn-danger" id="delete-all-keys-btn">
+                                    <i class="fas fa-trash-alt"></i> Delete All
+                                </button>
+                                <button class="btn btn-primary" id="add-key-btn">
+                                    <i class="fas fa-plus"></i> Add Key
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table id="keys-table">
+                                <thead>
+                                    <tr>
+                                        <th>Key</th>
+                                        <th>Status</th>
+                                        <th>Devices</th>
+                                        <th>Expires</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="keys-table-body">
+                                    <!-- Keys will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div class="right-column">
+                    <!-- Recent Devices -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Recent Devices</h3>
+                        </div>
+                        
+                        <ul class="device-list" id="recent-devices">
+                            <!-- Recent devices will be loaded here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Key Modal -->
+    <div class="modal" id="add-key-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New License Key</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="key-value">License Key</label>
+                    <input type="text" id="key-value" class="form-control" placeholder="Leave blank to auto-generate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="device-limit">Device Limit</label>
+                    <input type="number" id="device-limit" class="form-control" value="3" min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="key-expiry">Expiry Date</label>
+                    <input type="datetime-local" id="key-expiry" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="key-status">Status</label>
+                    <select id="key-status" class="form-control">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="key-notes">Notes</label>
+                    <textarea id="key-notes" class="form-control" rows="3" placeholder="Optional notes"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline cancel-btn">Cancel</button>
+                <button class="btn btn-primary" id="save-key-btn">Save Key</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Key Modal -->
+    <div class="modal" id="edit-key-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit License Key</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit-key-value">License Key</label>
+                    <input type="text" id="edit-key-value" class="form-control" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-device-limit">Device Limit</label>
+                    <input type="number" id="edit-device-limit" class="form-control" min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-key-expiry">Expiry Date</label>
+                    <input type="datetime-local" id="edit-key-expiry" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-key-status">Status</label>
+                    <select id="edit-key-status" class="form-control">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-key-notes">Notes</label>
+                    <textarea id="edit-key-notes" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Registered Devices</label>
+                    <div id="registered-devices" style="max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.5rem;">
+                        <!-- Devices will be listed here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline cancel-btn">Cancel</button>
+                <button class="btn btn-danger" id="delete-key-btn">Delete Key</button>
+                <button class="btn btn-primary" id="update-key-btn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // Global variables
+    let keysData = [];
+    let devicesData = [];
+    
+    // DOM Elements
+    const keysTableBody = document.getElementById('keys-table-body');
+    const recentDevicesList = document.getElementById('recent-devices');
+    const addKeyModal = document.getElementById('add-key-modal');
+    const editKeyModal = document.getElementById('edit-key-modal');
+    const addKeyBtn = document.getElementById('add-key-btn');
+    const deleteAllKeysBtn = document.getElementById('delete-all-keys-btn');
+    const saveKeyBtn = document.getElementById('save-key-btn');
+    const updateKeyBtn = document.getElementById('update-key-btn');
+    const deleteKeyBtn = document.getElementById('delete-key-btn');
+    const closeButtons = document.querySelectorAll('.close, .cancel-btn');
+    
+    // Initialize the dashboard
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadData();
+        renderKeysTable();
+        renderRecentDevices();
+        updateStats();
+        setupEventListeners();
+    });
+    
+    // Load data from API
+    async function loadData() {
+        try {
+            const response = await fetch('admin_api.php?action=get_data');
+            const data = await response.json();
+            
+            keysData = data.keys || [];
+            devicesData = data.devices || [];
+        } catch (error) {
+            console.error('Error loading data:', error);
+            alert('Failed to load data');
+        }
+    }
+    
+    // Render keys table
+    function renderKeysTable() {
+        keysTableBody.innerHTML = '';
+        
+        keysData.forEach(key => {
+            const usedDevices = devicesData.filter(d => d.key === key.key).length;
+            
+            // Determine status
+            let statusClass, statusText;
+            if (key.status === 'inactive') {
+                statusClass = 'badge-danger';
+                statusText = 'Inactive';
+            } else if (key.expiry && new Date(key.expiry) < new Date()) {
+                statusClass = 'badge-warning';
+                statusText = 'Expired';
+            } else {
+                statusClass = 'badge-success';
+                statusText = 'Active';
+            }
+            
+            // Format dates
+            const createdDate = new Date(key.created_at).toLocaleDateString();
+            const expiryDate = key.expiry ? new Date(key.expiry).toLocaleDateString() : 'Never';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <strong>${key.key}</strong>
+                    ${key.notes ? '<br><small style="color: var(--dark-gray);">' + key.notes + '</small>' : ''}
+                </td>
+                <td><span class="badge ${statusClass}">${statusText}</span></td>
+                <td>${usedDevices}/${key.device_limit}</td>
+                <td>${expiryDate}</td>
+                <td>${createdDate}</td>
+                <td class="actions-cell">
+                    <button class="btn btn-outline btn-sm edit-btn" data-key="${key.key}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            `;
+            
+            keysTableBody.appendChild(row);
+        });
+        
+        // Add event listeners to edit buttons
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => openEditModal(btn.dataset.key));
+        });
+    }
+    
+    // Render recent devices
+    function renderRecentDevices() {
+        recentDevicesList.innerHTML = '';
+        
+        const sortedDevices = [...devicesData].sort((a, b) => 
+            new Date(b.registered_at) - new Date(a.registered_at)
+        ).slice(0, 5);
+        
+        sortedDevices.forEach(device => {
+            const li = document.createElement('li');
+            li.className = 'device-item';
+            
+            li.innerHTML = `
+                <div class="device-icon">
+                    <i class="fas fa-laptop"></i>
+                </div>
+                <div class="device-info">
+                    <h4>${device.device_id}</h4>
+                    <p>${device.key} • ${new Date(device.registered_at).toLocaleString()}</p>
+                </div>
+            `;
+            
+            recentDevicesList.appendChild(li);
+        });
+    }
+    
+    // Update stats cards
+    function updateStats() {
+        document.getElementById('total-keys').textContent = keysData.length;
+        
+        const activeKeys = keysData.filter(k => 
+            k.status === 'active' && 
+            (!k.expiry || new Date(k.expiry) > new Date())
+        ).length;
+        document.getElementById('active-keys').textContent = activeKeys;
+        
+        const activeDevices = devicesData.length;
+        document.getElementById('active-devices').textContent = activeDevices;
+        
+        const expiringKeys = keysData.filter(k => 
+            k.expiry && 
+            new Date(k.expiry) > new Date() && 
+            new Date(k.expiry) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        ).length;
+        document.getElementById('expiring-keys').textContent = expiringKeys;
+    }
+    
+    // Set up event listeners
+    function setupEventListeners() {
+        // Add key button
+        addKeyBtn.addEventListener('click', () => {
+            addKeyModal.classList.add('active');
+        });
+        
+        // Delete all keys button
+        deleteAllKeysBtn.addEventListener('click', deleteAllKeys);
+        
+        // Save key button
+        saveKeyBtn.addEventListener('click', saveKey);
+        
+        // Update key button
+        updateKeyBtn.addEventListener('click', updateKey);
+        
+        // Delete key button
+        deleteKeyBtn.addEventListener('click', deleteKey);
+        
+        // Close buttons
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                addKeyModal.classList.remove('active');
+                editKeyModal.classList.remove('active');
+            });
+        });
+        
+        // Close modals when clicking outside
+        [addKeyModal, editKeyModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    }
+    
+    // Open edit modal
+    function openEditModal(keyValue) {
+        const key = keysData.find(k => k.key === keyValue);
+        if (!key) return;
+        
+        // Fill form
+        document.getElementById('edit-key-value').value = key.key;
+        document.getElementById('edit-device-limit').value = key.device_limit;
+        document.getElementById('edit-key-expiry').value = key.expiry ? 
+            key.expiry.substring(0, 16) : '';
+        document.getElementById('edit-key-status').value = key.status;
+        document.getElementById('edit-key-notes').value = key.notes || '';
+        
+        // List registered devices
+        const registeredDevices = devicesData.filter(d => d.key === key.key);
+        const devicesList = document.getElementById('registered-devices');
+        devicesList.innerHTML = '';
+        
+        if (registeredDevices.length === 0) {
+            devicesList.innerHTML = '<p style="padding: 1rem; text-align: center; color: var(--dark-gray);">No devices registered</p>';
+        } else {
+            registeredDevices.forEach(device => {
+                const div = document.createElement('div');
+                div.style.padding = '0.5rem';
+                div.style.borderBottom = '1px solid var(--gray)';
+                div.style.display = 'flex';
+                div.style.justifyContent = 'space-between';
+                
+                div.innerHTML = `
+                    <span>${device.device_id}</span>
+                    <small>${new Date(device.registered_at).toLocaleDateString()}</small>
+                `;
+                
+                devicesList.appendChild(div);
+            });
+        }
+        
+        // Store current key in modal dataset
+        editKeyModal.dataset.currentKey = key.key;
+        
+        // Show modal
+        editKeyModal.classList.add('active');
+    }
+    
+    // Save new key
+    async function saveKey() {
+        const keyData = {
+            key: document.getElementById('key-value').value || generateKey(),
+            device_limit: parseInt(document.getElementById('device-limit').value),
+            expiry: document.getElementById('key-expiry').value,
+            status: document.getElementById('key-status').value,
+            notes: document.getElementById('key-notes').value,
+            created_at: new Date().toISOString()
+        };
+        
+        // Validate
+        if (isNaN(keyData.device_limit) || keyData.device_limit < 1) {
+            alert('Device limit must be at least 1');
+            return;
+        }
+        
+        try {
+            const response = await fetch('admin_api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=create_key&${new URLSearchParams(keyData)}`
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Reload data
+                await loadData();
+                
+                // Update UI
+                renderKeysTable();
+                renderRecentDevices();
+                updateStats();
+                
+                // Close modal and clear form
+                addKeyModal.classList.remove('active');
+                document.getElementById('key-value').value = '';
+                document.getElementById('key-notes').value = '';
+                
+                alert('Key added successfully');
+            } else {
+                alert(result.message || 'Failed to add key');
+            }
+        } catch (error) {
+            console.error('Error adding key:', error);
+            alert('Failed to add key');
+        }
+    }
+    
+    // Update existing key
+    async function updateKey() {
+        const keyValue = editKeyModal.dataset.currentKey;
+        const keyData = {
+            key: keyValue,
+            device_limit: parseInt(document.getElementById('edit-device-limit').value),
+            expiry: document.getElementById('edit-key-expiry').value,
+            status: document.getElementById('edit-key-status').value,
+            notes: document.getElementById('edit-key-notes').value
+        };
+        
+        // Validate
+        if (isNaN(keyData.device_limit) || keyData.device_limit < 1) {
+            alert('Device limit must be at least 1');
+            return;
+        }
+        
+        try {
+            const response = await fetch('admin_api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=update_key&${new URLSearchParams(keyData)}`
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Reload data
+                await loadData();
+                
+                // Update UI
+                renderKeysTable();
+                renderRecentDevices();
+                updateStats();
+                
+                // Close modal
+                editKeyModal.classList.remove('active');
+                
+                alert('Key updated successfully');
+            } else {
+                alert(result.message || 'Failed to update key');
+            }
+        } catch (error) {
+            console.error('Error updating key:', error);
+            alert('Failed to update key');
+        }
+    }
+    
+    // Delete single key
+    async function deleteKey() {
+        const keyValue = editKeyModal.dataset.currentKey;
+        
+        if (!confirm(`Are you sure you want to delete key ${keyValue}? This will also remove all associated devices.`)) {
+            return;
+        }
+        
+        try {
+            const response = await fetch('admin_api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=delete_key&key=${encodeURIComponent(keyValue)}`
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Reload data
+                await loadData();
+                
+                // Update UI
+                renderKeysTable();
+                renderRecentDevices();
+                updateStats();
+                
+                // Close modal
+                editKeyModal.classList.remove('active');
+                
+                alert('Key deleted successfully');
+            } else {
+                alert(result.message || 'Failed to delete key');
+            }
+        } catch (error) {
+            console.error('Error deleting key:', error);
+            alert('Failed to delete key');
+        }
+    }
+    
+    // Delete all keys
+    async function deleteAllKeys() {
+        // Triple confirmation for safety
+        if (!confirm('WARNING: This will permanently delete ALL license keys and associated devices. Continue?')) return;
+        if (!confirm('This action cannot be undone. Are you absolutely sure?')) return;
+        if (prompt('Type "DELETE ALL" to confirm:') !== 'DELETE ALL') {
+            alert('Deletion cancelled');
+            return;
+        }
+        
+        try {
+            // Show loading state
+            deleteAllKeysBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+            deleteAllKeysBtn.disabled = true;
+            
+            const response = await fetch('admin_api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=delete_all_keys'
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Reload data
+                await loadData();
+                
+                // Update UI
+                renderKeysTable();
+                renderRecentDevices();
+                updateStats();
+                
+                alert('All keys and devices have been deleted successfully');
+            } else {
+                alert(result.message || 'Failed to delete keys');
+            }
+        } catch (error) {
+            console.error('Error deleting keys:', error);
+            alert('Failed to delete keys');
+        } finally {
+            // Reset button state
+            deleteAllKeysBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete All';
+            deleteAllKeysBtn.disabled = false;
+        }
+    }
+    
+    // Helper function to generate a random key
+    function generateKey() {
+        return 'TKS-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    }
+    </script>
+</body>
+</html>
